@@ -5,6 +5,7 @@
 #include "Game/LiveActor/ShadowController.hpp"
 #include "Game/Scene/SceneObjHolder.hpp"
 #include "JSystem/JGeometry.hpp"
+#include "JSystem/JGeometry/TVec.hpp"
 #include "JSystem/JMath/JMath.hpp"
 #include "math_types.hpp"
 
@@ -101,6 +102,33 @@ namespace MR {
     }
 
     // MR::isNearPlayerPose((LiveActor const *, f32, f32))
+    bool MR::isNearPlayerPose(const LiveActor *actor, float maxDistance, float heightTolerance) {
+        if (MR::isPlayerHidden()) {
+            return false;
+        }
+        
+        TVec3f yDir;  
+        TPos3f* mtx = (TPos3f*)actor->getBaseMtx();
+        mtx->getYDir(yDir);
+        
+        TVec3f *playerPos = MR::getPlayerPos();
+        
+        TVec3f actorToPlayer(actor->mPosition);
+        JMathInlineVEC::PSVECSubtract(playerPos, &actorToPlayer, &actorToPlayer);
+        
+        TVec3f projectedVector;  
+        float yComponent = MR::vecKillElement(actorToPlayer, yDir, &projectedVector);
+        
+        if (heightTolerance < fabsl(yComponent)) {
+            return false;
+        }
+        
+        float horizontalDistanceSquared = projectedVector.squared();
+        float maxDistanceSquared = maxDistance * maxDistance;
+        
+        return horizontalDistanceSquared <= maxDistanceSquared;
+    }
+
     // MR::isNearPlayerHorizontal((LiveActor const *, f32))
 
     void calcFrontVec(TVec3f *pFrontVec, const LiveActor *pActor) {
