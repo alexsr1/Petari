@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Game/LiveActor/LiveActor.hpp"
+#include "Game/Util/Array.hpp"
 
 class AnimScaleController;
 class Hanachan;
@@ -27,32 +28,32 @@ public:
     void exeWalk();
     void exeTrample();
     void exeBecomeAngry();
+    void endBecomeAngry();
     void exeAngryPursue();
+    void endAngryPursue();
     void exeAngryEnd();
     void exeWallHitEnd();
     void exeOverturn();
     void exeOverturnBound();
     void exeOverturnWait();
     void exeRecover();
+    void endRecover();
     void exeHipDropped();
     void exeBlow();
     void exeStarPointerBind();
+    void endStarPointerBind();
     bool isHeadHitWall();
+    bool isLandedInNerve(const Nerve*);
+    bool isHipDroppedLanded();
     void changeHeadAngry();
     void changeHeadCalmDown();
-    inline void endBecomeAngry();
-    inline void endAngryPursue();
-    inline void endRecover();
-    inline void endStarPointerBind();
-    bool isLandedInNerve(const Nerve*) const;
-    bool isHipDroppedLanded() const;
 
-    /* 0x8C */ Hanachan* mParent;
+    /* 0x8C */ Hanachan* mHost;
     /* 0x90 */ TVec3f mPushVelocity;
     /* 0x9C */ TVec3f mFallVelocity;
     /* 0xA8 */ PartsType mPartsType;
-    /* 0xAC */ TQuat4f mRotation;
-    /* 0xBC */ s32 mSegmentIndex;
+    /* 0xAC */ TQuat4f mRotationQuat;
+    /* 0xBC */ s32 mPartsIndex;
     /* 0xC0 */ s32 mActionStartStep;
     /* 0xC4 */ bool mIsLanded;
 };
@@ -91,10 +92,10 @@ public:
     void moveHeadAlongRail(f32);
     void moveHeadToPlayer(f32, f32);
     void moveBodyAlongHead();
-    inline void endStarPointerBind();
+    void endStarPointerBind();
     TVec3f calcSensorDirection(const HitSensor*, const HitSensor*) const;
 
-    /* 0x8C */ HanachanParts* mBodyParts[5];
+    /* 0x8C */ MR::FixedArray< HanachanParts*, 5 > mBodyParts;
     /* 0xA0 */ TVec3f mAttackPos;
     /* 0xAC */ TVec3f mFrontDir;
     /* 0xB8 */ bool mIsChasePlayer;
