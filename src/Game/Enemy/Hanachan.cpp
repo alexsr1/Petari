@@ -126,8 +126,8 @@ namespace NrvHanachan {
     NEW_NERVE(HanachanNrvHanachanStarPointerBindEndOverturn, Hanachan, WallHitEnd);
 };  // namespace NrvHanachan
 
-HanachanParts::HanachanParts(Hanachan* pParent, s32 partsIndex, const char* pName, const char* pModelName)
-    : LiveActor(pName), mHost(pParent), mPushVelocity(0.0f), mFallVelocity(0.0f), mPartsType(PartsType_Body), mRotationQuat(0.0f, 0.0f, 0.0f, 1.0f),
+HanachanParts::HanachanParts(Hanachan* pHost, s32 partsIndex, const char* pName, const char* pModelName)
+    : LiveActor(pName), mHost(pHost), mPushVelocity(0.0f), mFallVelocity(0.0f), mPartsType(PartsType_Body), mRotationQuat(0.0f, 0.0f, 0.0f, 1.0f),
       mPartsIndex(partsIndex), mActionStartStep(-1), mIsLanded() {
     initModelManagerWithAnm(pModelName, nullptr, false);
 
@@ -894,7 +894,7 @@ void Hanachan::control() {
         }
     }
 
-    mPosition = (mBodyParts[2]->mPosition);
+    mPosition = mBodyParts[2]->mPosition;
 
     if (MR::isFirstStep(this)) {
         if (isNerve(&NrvHanachan::HanachanNrvHanachanWalk::sInstance)) {
@@ -1198,7 +1198,7 @@ void Hanachan::setNerveBlow(const TVec3f& rPos) {
 
     f32 angle = ::hInitBlowRadian;
     f32 numSegments = mBodyParts.size() - 1;
-    f32 angleStep = (PI - ::hInitBlowRadian * 2.0f) / numSegments;
+    f32 angleStep = (MR::pi() - ::hInitBlowRadian * 2.0f) / numSegments;
     TVec3f blow;
     TVec3f up;
 
@@ -1207,7 +1207,7 @@ void Hanachan::setNerveBlow(const TVec3f& rPos) {
 
     if (headDir.dot(side) < 0.0f) {
         angleStep = -angleStep;
-        angle = PI - angle;
+        angle = MR::pi() - angle;
     }
 
     for (HanachanParts** current = mBodyParts.begin(); current < mBodyParts.end(); current++) {
