@@ -82,6 +82,7 @@ public:
     void exeHipDropped();
     void exeBlow();
     void exeStarPointerBind();
+    void endStarPointerBind();
     s32 calcNearestInfectionId();
     bool isOwnSensor(HitSensor*);
     void setNerveBlow(const TVec3f&);
@@ -91,9 +92,8 @@ public:
     bool isStarPointerPointing();
     void moveHeadAlongRail(f32);
     void moveHeadToPlayer(f32, f32);
-    void moveBodyAlongHead();
-    void endStarPointerBind();
     TVec3f calcSensorDirection(const HitSensor*, const HitSensor*) const;
+    void moveBodyAlongHead();
 
     /* 0x8C */ MR::FixedArray< HanachanParts*, 5 > mBodyParts;
     /* 0xA0 */ TVec3f mAttackPos;

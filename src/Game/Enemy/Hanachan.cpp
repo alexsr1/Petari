@@ -126,13 +126,6 @@ namespace NrvHanachan {
     NEW_NERVE(HanachanNrvHanachanStarPointerBindEndOverturn, Hanachan, WallHitEnd);
 };  // namespace NrvHanachan
 
-TVec3f Hanachan::calcSensorDirection(const HitSensor* pSensor, const HitSensor* pTarget) const {
-    TVec3f dir = pTarget->mPosition;
-    dir -= pSensor->mPosition;
-    MR::normalizeOrZero(&dir);
-    return dir;
-}
-
 HanachanParts::HanachanParts(Hanachan* pParent, s32 partsIndex, const char* pName, const char* pModelName)
     : LiveActor(pName), mHost(pParent), mPushVelocity(0.0f), mFallVelocity(0.0f), mPartsType(PartsType_Body), mRotationQuat(0.0f, 0.0f, 0.0f, 1.0f),
       mPartsIndex(partsIndex), mActionStartStep(-1), mIsLanded() {
@@ -1325,6 +1318,13 @@ void Hanachan::moveHeadToPlayer(f32 speed, f32 turnSpeed) {
 
     HanachanParts* pHead = mBodyParts[0];
     MR::blendQuatUpFront(&pHead->mRotationQuat, -pHead->mGravity, mFrontDir, 0.5f, 0.5f);
+}
+
+TVec3f Hanachan::calcSensorDirection(const HitSensor* pSensor, const HitSensor* pTarget) const {
+    TVec3f dir = pTarget->mPosition;
+    dir -= pSensor->mPosition;
+    MR::normalizeOrZero(&dir);
+    return dir;
 }
 
 void Hanachan::moveBodyAlongHead() {
