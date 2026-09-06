@@ -9,9 +9,9 @@ class Hanachan;
 class HanachanParts : public LiveActor {
 public:
     enum PartsType {
-        /* 0x1 */ PartsType_Head,
-        /* 0x2 */ PartsType_Body,
-        /* 0x3 */ PartsType_BodyS,
+        /* 0x0 */ PartsType_Head,
+        /* 0x1 */ PartsType_Body,
+        /* 0x2 */ PartsType_BodyS,
     };
 
     HanachanParts(Hanachan*, s32, const char*, const char*);
